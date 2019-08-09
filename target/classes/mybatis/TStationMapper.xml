@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casco.mapper.TStationMapper">
+  <resultMap id="BaseResultMap" type="com.casco.pojo.TStation">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="stationId" jdbcType="INTEGER" property="stationid" />
+    <result column="consoleId" jdbcType="INTEGER" property="consoleid" />
+    <result column="staionName" jdbcType="VARCHAR" property="staionname" />
+    <result column="consoleName" jdbcType="VARCHAR" property="consolename" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, stationId, consoleId, staionName, consoleName
+  </sql>
+  <select id="selectByExample" parameterType="com.casco.pojo.TStationExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_station
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_station
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_station
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.casco.pojo.TStationExample">
+    delete from t_station
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.casco.pojo.TStation">
+    insert into t_station (id, stationId, consoleId, 
+      staionName, consoleName)
+    values (#{id,jdbcType=INTEGER}, #{stationid,jdbcType=INTEGER}, #{consoleid,jdbcType=INTEGER}, 
+      #{staionname,jdbcType=VARCHAR}, #{consolename,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.casco.pojo.TStation">
+    insert into t_station
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="stationid != null">
+        stationId,
+      </if>
+      <if test="consoleid != null">
+        consoleId,
+      </if>
+      <if test="staionname != null">
+        staionName,
+      </if>
+      <if test="consolename != null">
+        consoleName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="stationid != null">
+        #{stationid,jdbcType=INTEGER},
+      </if>
+      <if test="consoleid != null">
+        #{consoleid,jdbcType=INTEGER},
+      </if>
+      <if test="staionname != null">
+        #{staionname,jdbcType=VARCHAR},
+      </if>
+      <if test="consolename != null">
+        #{consolename,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.casco.pojo.TStationExample" resultType="java.lang.Long">
+    select count(*) from t_station
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_station
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.stationid != null">
+        stationId = #{record.stationid,jdbcType=INTEGER},
+      </if>
+      <if test="record.consoleid != null">
+        consoleId = #{record.consoleid,jdbcType=INTEGER},
+      </if>
+      <if test="record.staionname != null">
+        staionName = #{record.staionname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.consolename != null">
+        consoleName = #{record.consolename,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_station
+    set id = #{record.id,jdbcType=INTEGER},
+      stationId = #{record.stationid,jdbcType=INTEGER},
+      consoleId = #{record.consoleid,jdbcType=INTEGER},
+      staionName = #{record.staionname,jdbcType=VARCHAR},
+      consoleName = #{record.consolename,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.casco.pojo.TStation">
+    update t_station
+    <set>
+      <if test="stationid != null">
+        stationId = #{stationid,jdbcType=INTEGER},
+      </if>
+      <if test="consoleid != null">
+        consoleId = #{consoleid,jdbcType=INTEGER},
+      </if>
+      <if test="staionname != null">
+        staionName = #{staionname,jdbcType=VARCHAR},
+      </if>
+      <if test="consolename != null">
+        consoleName = #{consolename,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.casco.pojo.TStation">
+    update t_station
+    set stationId = #{stationid,jdbcType=INTEGER},
+      consoleId = #{consoleid,jdbcType=INTEGER},
+      staionName = #{staionname,jdbcType=VARCHAR},
+      consoleName = #{consolename,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="insertListStaion" parameterType="list">
+    insert into t_station values
+    <foreach collection="list" item="station" index="index" separator=",">
+      (default,#{station.stationid},#{station.consoleid},#{station.staionname},#{station.consolename})
+    </foreach>
+  </insert>
+</mapper>

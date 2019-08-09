@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casco.mapper.TLinedefMapper">
+  <resultMap id="BaseResultMap" type="com.casco.pojo.TLinedef">
+    <id column="absNumber" jdbcType="INTEGER" property="absnumber" />
+    <result column="absName" jdbcType="VARCHAR" property="absname" />
+    <result column="ckFlag" jdbcType="INTEGER" property="ckflag" />
+    <result column="fromSta" jdbcType="INTEGER" property="fromsta" />
+    <result column="toSta" jdbcType="INTEGER" property="tosta" />
+    <result column="direction" jdbcType="INTEGER" property="direction" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    absNumber, absName, ckFlag, fromSta, toSta, direction
+  </sql>
+  <select id="selectByExample" parameterType="com.casco.pojo.TLinedefExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_linedef
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_linedef
+    where absNumber = #{absnumber,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_linedef
+    where absNumber = #{absnumber,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.casco.pojo.TLinedefExample">
+    delete from t_linedef
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.casco.pojo.TLinedef">
+    <selectKey keyProperty="absnumber" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_linedef (absName, ckFlag, fromSta, 
+      toSta, direction)
+    values (#{absname,jdbcType=VARCHAR}, #{ckflag,jdbcType=INTEGER}, #{fromsta,jdbcType=INTEGER}, 
+      #{tosta,jdbcType=INTEGER}, #{direction,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.casco.pojo.TLinedef">
+    <selectKey keyProperty="absnumber" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_linedef
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="absname != null">
+        absName,
+      </if>
+      <if test="ckflag != null">
+        ckFlag,
+      </if>
+      <if test="fromsta != null">
+        fromSta,
+      </if>
+      <if test="tosta != null">
+        toSta,
+      </if>
+      <if test="direction != null">
+        direction,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="absname != null">
+        #{absname,jdbcType=VARCHAR},
+      </if>
+      <if test="ckflag != null">
+        #{ckflag,jdbcType=INTEGER},
+      </if>
+      <if test="fromsta != null">
+        #{fromsta,jdbcType=INTEGER},
+      </if>
+      <if test="tosta != null">
+        #{tosta,jdbcType=INTEGER},
+      </if>
+      <if test="direction != null">
+        #{direction,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.casco.pojo.TLinedefExample" resultType="java.lang.Long">
+    select count(*) from t_linedef
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_linedef
+    <set>
+      <if test="record.absnumber != null">
+        absNumber = #{record.absnumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.absname != null">
+        absName = #{record.absname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ckflag != null">
+        ckFlag = #{record.ckflag,jdbcType=INTEGER},
+      </if>
+      <if test="record.fromsta != null">
+        fromSta = #{record.fromsta,jdbcType=INTEGER},
+      </if>
+      <if test="record.tosta != null">
+        toSta = #{record.tosta,jdbcType=INTEGER},
+      </if>
+      <if test="record.direction != null">
+        direction = #{record.direction,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_linedef
+    set absNumber = #{record.absnumber,jdbcType=INTEGER},
+      absName = #{record.absname,jdbcType=VARCHAR},
+      ckFlag = #{record.ckflag,jdbcType=INTEGER},
+      fromSta = #{record.fromsta,jdbcType=INTEGER},
+      toSta = #{record.tosta,jdbcType=INTEGER},
+      direction = #{record.direction,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.casco.pojo.TLinedef">
+    update t_linedef
+    <set>
+      <if test="absname != null">
+        absName = #{absname,jdbcType=VARCHAR},
+      </if>
+      <if test="ckflag != null">
+        ckFlag = #{ckflag,jdbcType=INTEGER},
+      </if>
+      <if test="fromsta != null">
+        fromSta = #{fromsta,jdbcType=INTEGER},
+      </if>
+      <if test="tosta != null">
+        toSta = #{tosta,jdbcType=INTEGER},
+      </if>
+      <if test="direction != null">
+        direction = #{direction,jdbcType=INTEGER},
+      </if>
+    </set>
+    where absNumber = #{absnumber,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.casco.pojo.TLinedef">
+    update t_linedef
+    set absName = #{absname,jdbcType=VARCHAR},
+      ckFlag = #{ckflag,jdbcType=INTEGER},
+      fromSta = #{fromsta,jdbcType=INTEGER},
+      toSta = #{tosta,jdbcType=INTEGER},
+      direction = #{direction,jdbcType=INTEGER}
+    where absNumber = #{absnumber,jdbcType=INTEGER}
+  </update>
+</mapper>

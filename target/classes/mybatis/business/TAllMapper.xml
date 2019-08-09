@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casco.mapper.business.TAllMapper">
+  <resultMap id="BaseResultMap" type="com.casco.pojo.TAll">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="absNumber" jdbcType="INTEGER" property="absnumber" />
+    <result column="absName" jdbcType="VARCHAR" property="absname" />
+    <result column="absDirection" jdbcType="INTEGER" property="absdirection" />
+    <result column="fromStaId" jdbcType="INTEGER" property="fromstaid" />
+    <result column="fromStaName" jdbcType="VARCHAR" property="fromstaname" />
+    <result column="inEntry" jdbcType="INTEGER" property="inentry" />
+    <result column="toStaId" jdbcType="INTEGER" property="tostaid" />
+    <result column="toStaName" jdbcType="VARCHAR" property="tostaname" />
+    <result column="outEntry" jdbcType="INTEGER" property="outentry" />
+    <result column="stopTime" jdbcType="VARCHAR" property="stoptime" />
+    <result column="startTime" jdbcType="VARCHAR" property="starttime" />
+    <result column="runTime" jdbcType="VARCHAR" property="runtime" />
+    <result column="runTimeDirection" jdbcType="INTEGER" property="runtimedirection" />
+    <result column="trainType" jdbcType="INTEGER" property="traintype" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, absNumber, absName, absDirection, fromStaId, fromStaName, inEntry, toStaId, toStaName, 
+    outEntry, stopTime, startTime, runTime, runTimeDirection, trainType
+  </sql>
+  <select id="selectByExample" parameterType="com.casco.pojo.TAllExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_all
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_all
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_all
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.casco.pojo.TAllExample">
+    delete from t_all
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.casco.pojo.TAll">
+    insert into t_all (id, absNumber, absName, 
+      absDirection, fromStaId, fromStaName, 
+      inEntry, toStaId, toStaName, 
+      outEntry, stopTime, startTime, 
+      runTime, runTimeDirection, trainType
+      )
+    values (#{id,jdbcType=BIGINT}, #{absnumber,jdbcType=INTEGER}, #{absname,jdbcType=VARCHAR}, 
+      #{absdirection,jdbcType=INTEGER}, #{fromstaid,jdbcType=INTEGER}, #{fromstaname,jdbcType=VARCHAR}, 
+      #{inentry,jdbcType=INTEGER}, #{tostaid,jdbcType=INTEGER}, #{tostaname,jdbcType=VARCHAR}, 
+      #{outentry,jdbcType=INTEGER}, #{stoptime,jdbcType=VARCHAR}, #{starttime,jdbcType=VARCHAR}, 
+      #{runtime,jdbcType=VARCHAR}, #{runtimedirection,jdbcType=INTEGER}, #{traintype,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.casco.pojo.TAll">
+    insert into t_all
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="absnumber != null">
+        absNumber,
+      </if>
+      <if test="absname != null">
+        absName,
+      </if>
+      <if test="absdirection != null">
+        absDirection,
+      </if>
+      <if test="fromstaid != null">
+        fromStaId,
+      </if>
+      <if test="fromstaname != null">
+        fromStaName,
+      </if>
+      <if test="inentry != null">
+        inEntry,
+      </if>
+      <if test="tostaid != null">
+        toStaId,
+      </if>
+      <if test="tostaname != null">
+        toStaName,
+      </if>
+      <if test="outentry != null">
+        outEntry,
+      </if>
+      <if test="stoptime != null">
+        stopTime,
+      </if>
+      <if test="starttime != null">
+        startTime,
+      </if>
+      <if test="runtime != null">
+        runTime,
+      </if>
+      <if test="runtimedirection != null">
+        runTimeDirection,
+      </if>
+      <if test="traintype != null">
+        trainType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="absnumber != null">
+        #{absnumber,jdbcType=INTEGER},
+      </if>
+      <if test="absname != null">
+        #{absname,jdbcType=VARCHAR},
+      </if>
+      <if test="absdirection != null">
+        #{absdirection,jdbcType=INTEGER},
+      </if>
+      <if test="fromstaid != null">
+        #{fromstaid,jdbcType=INTEGER},
+      </if>
+      <if test="fromstaname != null">
+        #{fromstaname,jdbcType=VARCHAR},
+      </if>
+      <if test="inentry != null">
+        #{inentry,jdbcType=INTEGER},
+      </if>
+      <if test="tostaid != null">
+        #{tostaid,jdbcType=INTEGER},
+      </if>
+      <if test="tostaname != null">
+        #{tostaname,jdbcType=VARCHAR},
+      </if>
+      <if test="outentry != null">
+        #{outentry,jdbcType=INTEGER},
+      </if>
+      <if test="stoptime != null">
+        #{stoptime,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null">
+        #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="runtime != null">
+        #{runtime,jdbcType=VARCHAR},
+      </if>
+      <if test="runtimedirection != null">
+        #{runtimedirection,jdbcType=INTEGER},
+      </if>
+      <if test="traintype != null">
+        #{traintype,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.casco.pojo.TAllExample" resultType="java.lang.Long">
+    select count(*) from t_all
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_all
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.absnumber != null">
+        absNumber = #{record.absnumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.absname != null">
+        absName = #{record.absname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.absdirection != null">
+        absDirection = #{record.absdirection,jdbcType=INTEGER},
+      </if>
+      <if test="record.fromstaid != null">
+        fromStaId = #{record.fromstaid,jdbcType=INTEGER},
+      </if>
+      <if test="record.fromstaname != null">
+        fromStaName = #{record.fromstaname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inentry != null">
+        inEntry = #{record.inentry,jdbcType=INTEGER},
+      </if>
+      <if test="record.tostaid != null">
+        toStaId = #{record.tostaid,jdbcType=INTEGER},
+      </if>
+      <if test="record.tostaname != null">
+        toStaName = #{record.tostaname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outentry != null">
+        outEntry = #{record.outentry,jdbcType=INTEGER},
+      </if>
+      <if test="record.stoptime != null">
+        stopTime = #{record.stoptime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.starttime != null">
+        startTime = #{record.starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.runtime != null">
+        runTime = #{record.runtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.runtimedirection != null">
+        runTimeDirection = #{record.runtimedirection,jdbcType=INTEGER},
+      </if>
+      <if test="record.traintype != null">
+        trainType = #{record.traintype,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_all
+    set id = #{record.id,jdbcType=BIGINT},
+      absNumber = #{record.absnumber,jdbcType=INTEGER},
+      absName = #{record.absname,jdbcType=VARCHAR},
+      absDirection = #{record.absdirection,jdbcType=INTEGER},
+      fromStaId = #{record.fromstaid,jdbcType=INTEGER},
+      fromStaName = #{record.fromstaname,jdbcType=VARCHAR},
+      inEntry = #{record.inentry,jdbcType=INTEGER},
+      toStaId = #{record.tostaid,jdbcType=INTEGER},
+      toStaName = #{record.tostaname,jdbcType=VARCHAR},
+      outEntry = #{record.outentry,jdbcType=INTEGER},
+      stopTime = #{record.stoptime,jdbcType=VARCHAR},
+      startTime = #{record.starttime,jdbcType=VARCHAR},
+      runTime = #{record.runtime,jdbcType=VARCHAR},
+      runTimeDirection = #{record.runtimedirection,jdbcType=INTEGER},
+      trainType = #{record.traintype,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.casco.pojo.TAll">
+    update t_all
+    <set>
+      <if test="absnumber != null">
+        absNumber = #{absnumber,jdbcType=INTEGER},
+      </if>
+      <if test="absname != null">
+        absName = #{absname,jdbcType=VARCHAR},
+      </if>
+      <if test="absdirection != null">
+        absDirection = #{absdirection,jdbcType=INTEGER},
+      </if>
+      <if test="fromstaid != null">
+        fromStaId = #{fromstaid,jdbcType=INTEGER},
+      </if>
+      <if test="fromstaname != null">
+        fromStaName = #{fromstaname,jdbcType=VARCHAR},
+      </if>
+      <if test="inentry != null">
+        inEntry = #{inentry,jdbcType=INTEGER},
+      </if>
+      <if test="tostaid != null">
+        toStaId = #{tostaid,jdbcType=INTEGER},
+      </if>
+      <if test="tostaname != null">
+        toStaName = #{tostaname,jdbcType=VARCHAR},
+      </if>
+      <if test="outentry != null">
+        outEntry = #{outentry,jdbcType=INTEGER},
+      </if>
+      <if test="stoptime != null">
+        stopTime = #{stoptime,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null">
+        startTime = #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="runtime != null">
+        runTime = #{runtime,jdbcType=VARCHAR},
+      </if>
+      <if test="runtimedirection != null">
+        runTimeDirection = #{runtimedirection,jdbcType=INTEGER},
+      </if>
+      <if test="traintype != null">
+        trainType = #{traintype,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.casco.pojo.TAll">
+    update t_all
+    set absNumber = #{absnumber,jdbcType=INTEGER},
+      absName = #{absname,jdbcType=VARCHAR},
+      absDirection = #{absdirection,jdbcType=INTEGER},
+      fromStaId = #{fromstaid,jdbcType=INTEGER},
+      fromStaName = #{fromstaname,jdbcType=VARCHAR},
+      inEntry = #{inentry,jdbcType=INTEGER},
+      toStaId = #{tostaid,jdbcType=INTEGER},
+      toStaName = #{tostaname,jdbcType=VARCHAR},
+      outEntry = #{outentry,jdbcType=INTEGER},
+      stopTime = #{stoptime,jdbcType=VARCHAR},
+      startTime = #{starttime,jdbcType=VARCHAR},
+      runTime = #{runtime,jdbcType=VARCHAR},
+      runTimeDirection = #{runtimedirection,jdbcType=INTEGER},
+      trainType = #{traintype,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <insert id="insertListTall" parameterType="list">
+    insert into t_all values
+    <foreach collection="list" item="runtime" index="index" separator=",">
+      (default,#{runtime.absnumber},#{runtime.absname},#{runtime.absdirection},#{runtime.fromstaid},#{runtime.fromstaname},#{runtime.inentry},
+      #{runtime.tostaid},#{runtime.tostaname},#{runtime.outentry},#{runtime.stoptime},#{runtime.starttime},#{runtime.runtime},#{runtime.runtimedirection},#{runtime.traintype}
+      )
+    </foreach>
+  </insert>
+
+</mapper>

@@ -1,6 +1,7 @@
 package com.casco.service;
 
 public interface InitConfig {
+   public String readPath();
    void readConfig();
 
    void readGpc(String filename);

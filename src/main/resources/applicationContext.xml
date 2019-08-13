@@ -41,6 +41,8 @@
     <bean id="txManage" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     	<property name="dataSource" ref="dataSource"></property>
     </bean>
+    <!-- Aop异常日志记录-->
+    <bean id="exceptionLog" class="com.casco.exception.ExceptionLogHandler"></bean>
     <!-- 声明式事务 -->
     <tx:advice id="txAdvice" transaction-manager="txManage">
     	<tx:attributes>
@@ -60,5 +62,10 @@
     <aop:config>
     	<aop:pointcut expression="execution(* com.casco.service.impl.*.*(..))" id="mypoint"/>
     	<aop:advisor advice-ref="txAdvice" pointcut-ref="mypoint"/>
+        <aop:advisor advice-ref="exceptionLog" pointcut-ref="mypoint"/>
     </aop:config>
+
+	<aop:aspectj-autoproxy />
+
+	<aop:config proxy-target-class="true"></aop:config>
 </beans>

@@ -67,6 +67,16 @@ layui.config({
 
     initData();
 
+    $("#saveruntime").click(function () {
+        var param = new Object();
+        param.status = 0;
+        commonUtils.post("/saveruntime",JSON.stringify(param),false,true,function (res) {
+            if (res.code == 0){
+                commonUtils.alert("保存成功",6);
+            }
+        })
+    })
+
     $("#selectBtn").click(function () {
 
         var options = $("#consoleId option:selected");
@@ -101,17 +111,38 @@ layui.config({
                     html+='<td >'+runtimes[i].tostaname+'</td>'
                     html+='<td >'+runtimes[i].tostaid+'</td>'
                     html+='<td >'+runtimes[i].outentry+'</td>'
-                    html+='<td >'+runtimes[i].absdirection+'</td>'
-                    html+='<td >'+runtimes[i].traintype+'</td>'
+                    switch (runtimes[i].absdirection) {
+                        case 0 : html+='<td >上行</td>'; break;
+                        case 1 : html+='<td >下行</td>'; break;
+                        case 3 : html+='<td >双向</td>'; break;
+
+                    }
+                    switch (runtimes[i].traintype) {
+                        case 0: html+='<td >特快客</td>';break;
+                        case 1: html+='<td >普快客</td>';break;
+                        case 2: html+='<td >普通客</td>';break;
+                        case 3: html+='<td >临时客</td>';break;
+                        case 4: html+='<td >货车</td>';break;
+                        case 5: html+='<td >动车</td>';break;
+                        case 6: html+='<td >特快货</td>';break;
+                        case 7: html+='<td >快速货</td>';break;
+
+                    }
+
                     html+='<td><input type="text"   value='+runtimes[i].stoptime+'></td>'
                     html+='<td><input type="text"   value='+runtimes[i].starttime+'></td>'
                     html+='<td><input type="text"   value='+runtimes[i].runtime+'></td>'
-                    html+='<td >'+runtimes[i].runtimedirection+'</td>'
+                    switch (runtimes[i].runtimedirection) {
+                        case 0:html+='<td >上</td>';break;
+                        case 1:html+='<td >下</td>';break;
+                    }
+
                     html+= '</tr >';
                 }
                 $("#tbody").empty();
                 $("#tbody").append(html);
                 form.render();
+
             }
         })
     })
@@ -128,8 +159,56 @@ layui.config({
     });
 
 
+    $("body").delegate("input",
+        "focus",
+        function () {
+            $(this).css("color","#FF4500");
+        });
 
+    $("body").delegate("input",
+        "blur",
+        function () {
+            $(this).css("color","#3399FF");
+        });
 
+    $("body").delegate("input",
+        "change",
+        function () {
+            var absnumber = $(this).parent().parent().children().eq(1).html();
+            var _traintype = $(this).parent().parent().children().eq(9).html();
+            switch (_traintype) {
+                case "特快客": var traintype=0;break;
+                case "普快客": var traintype=1;break;
+                case "普通客": var traintype=2;break;
+                case "临时客": var traintype=3;break;
+                case "货车": var traintype=4;break;
+                case "动车": var traintype=5;break;
+                case "特快货": var traintype=6;break;
+                case "快速货": var traintype=7;break;
+            }
+            var stoptime = $(this).parent().parent().children().eq(10).children().val();
+            var starttime = $(this).parent().parent().children().eq(11).children().val();
+            var runtime = $(this).parent().parent().children().eq(12).children().val();
+            var _runtimedirection = $(this).parent().parent().children().eq(13).html();
+            switch (_runtimedirection) {
+                case "上": var runtimedirection =0 ; break;
+                case "下": var runtimedirection =1 ; break;
+
+            }
+            var param = new Object();
+            param.absnumber = absnumber;
+            param.traintype = traintype;
+            param.stoptime = stoptime;
+            param.starttime = starttime;
+            param.runtime = runtime;
+            param.runtimedirection = runtimedirection;
+            commonUtils.post("/changeruntime?"+Math.random(),JSON.stringify(param),false,true,function () {
+
+            })
+
+        });
+
+/*
     $("input").focus(function(){
         $(this).css("color","#FF4500");
 
@@ -138,8 +217,8 @@ layui.config({
     $("input").blur(function(){
         $(this).css("color","#3399FF");
 
-
     });
+*/
 
     window.closePage = function(){
     };

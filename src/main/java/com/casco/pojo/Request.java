@@ -3,7 +3,7 @@ package com.casco.pojo;
 import java.util.Objects;
 
 public class Request {
-    private  int consoleId;
+    private  String consoleId;
     private  int status;
     private int stationId;
 
@@ -11,11 +11,11 @@ public class Request {
     public Request() {
     }
 
-    public int getConsoleId() {
+    public String getConsoleId() {
         return consoleId;
     }
 
-    public void setConsoleId(int consoleId) {
+    public void setConsoleId(String consoleId) {
         this.consoleId = consoleId;
     }
 

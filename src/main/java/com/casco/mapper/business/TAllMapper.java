@@ -3,6 +3,7 @@ package com.casco.mapper.business;
 import com.casco.pojo.TAll;
 import com.casco.pojo.TAllExample;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -32,4 +33,7 @@ public interface TAllMapper {
     int updateByPrimaryKeySelective(TAll record);
 
     int updateByPrimaryKey(TAll record);
+
+    @Update("update t_all set  stopTime = #{0} ,startTime = #{1} ,runTime = #{2} WHERE absNumber = #{3} and trainType = #{4} and runTimeDirection = #{5};")
+    int updataRuntime(String stoptime,String starttime,String runtime,Integer absnumber,Integer traintype,Integer runtimedirection);
 }

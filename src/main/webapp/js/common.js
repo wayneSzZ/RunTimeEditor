@@ -10,7 +10,7 @@ layui.define(["form", "layer", "jquery","table"], function (exports) {
          * @returns {string}
          */
         basePath: function () {
-            return "http://localhost:8082";
+            return "http://localhost:80";
         },
         /**
          * 时间戳格式化函数

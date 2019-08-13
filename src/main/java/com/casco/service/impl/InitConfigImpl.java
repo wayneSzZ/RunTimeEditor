@@ -1,10 +1,14 @@
 package com.casco.service.impl;
 
+import com.casco.common.CommonUntil;
+import com.casco.exception.OrderExceptionEnum;
+import com.casco.exception.OrderPeriodException;
 import com.casco.mapper.business.TAllMapper;
 import com.casco.mapper.business.TConsoleMapper;
 import com.casco.mapper.business.TStationMapper;
 import com.casco.pojo.*;
 import com.casco.service.InitConfig;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+
 @Service
-public class InitConfigImpl implements InitConfig {
+public class InitConfigImpl implements InitConfig  {
 
 
 
@@ -26,6 +31,8 @@ public class InitConfigImpl implements InitConfig {
     private  TStationMapper tStationMapper;
     @Autowired
     private  TConsoleMapper tConsoleMapper;
+
+    Logger logger = Logger.getLogger(InitConfigImpl.class);
 
   /*  private static Map<Integer,String> map = new HashMap<Integer, String>();
     private  static  List cruntimeslist  =new ArrayList<Cruntime>();
@@ -44,24 +51,20 @@ public class InitConfigImpl implements InitConfig {
 
     List<Cruntime> cruntimeList = new ArrayList<Cruntime>();
 
-    public static boolean isInteger(String str) {
-        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
-        return pattern.matcher(str).matches();
-    }
+    CommonUntil commonUntil = CommonUntil.getInstance();
+
 
     @Override
-    public  void   readConfig(){
-
-/*        TEntryExample tEntryExample = new TEntryExample();
-        TEntryExample.Criteria criteria = tEntryExample.createCriteria();
-        criteria.andAbsnumberBetween(800,805);
-        List<TEntry> tEntryList =  tEntryMapper.selectByExample(tEntryExample);
-        System.out.println("InitConfigImpl.readConfig:" + tEntryList.size());
-        for (TEntry tEntry : tEntryList){
-            System.out.println(tEntry);
+    public String readPath() throws OrderPeriodException{
+        String basePath = this.getClass().getResource("/").getPath();
+        logger.info(">>>>>>>>>>>>>程序根路径:" + basePath);
+       /* try{
+            int i = 1/0;
+        }catch (Exception e){
+            throw new OrderPeriodException(OrderExceptionEnum.SYSTEM_ERROR,e);
         }*/
 
-        File file = new File("D:\\RunTimeEditor\\path.config");
+        File file = new File(basePath+"path.config");
         BufferedReader reader = null;
         String path = null;
         String resault = "";
@@ -80,12 +83,7 @@ public class InitConfigImpl implements InitConfig {
                     }
                 }
             }
-            //读取配置文件入库
-            readEinty(resault + "data/entity.cfg");
-            readGpc(resault + "data/gpc.def");
-            readTg(resault + "data/tg.def");
-            readEntry(resault + "data/entry.cfg");
-            readRuntime(resault + "data/run_time.txt");
+
             reader.close();
 
         } catch (IOException e) {
@@ -99,13 +97,36 @@ public class InitConfigImpl implements InitConfig {
                 }
             }
         }
-        return  ;
+       logger.info(">>>>>>>>>>>>>配置文件根路径：" + resault);
+        return resault;
+    }
+
+    @Override
+    public  void   readConfig(){
+
+/*        TEntryExample tEntryExample = new TEntryExample();
+        TEntryExample.Criteria criteria = tEntryExample.createCriteria();
+        criteria.andAbsnumberBetween(800,805);
+        List<TEntry> tEntryList =  tEntryMapper.selectByExample(tEntryExample);
+        System.out.println("InitConfigImpl.readConfig:" + tEntryList.size());
+        for (TEntry tEntry : tEntryList){
+            System.out.println(tEntry);
+        }*/
+
+        String resault = readPath();
+            //读取配置文件入库
+        readEinty(resault + "data/entity.cfg");
+        readGpc(resault + "data/gpc.def");
+        readTg(resault + "data/tg.def");
+        readEntry(resault + "data/entry.cfg");
+        readRuntime(resault + "data/run_time.txt");
+
     }
 
 
     @Override
     public  void readGpc(String filename) {
-        System.out.println(filename);
+        logger.info(">>>>>>>>>>>>>读取文件："+ filename);
         File file = new File(filename);
         InputStreamReader read = null;
         BufferedReader reader = null;
@@ -138,7 +159,7 @@ public class InitConfigImpl implements InitConfig {
                     tConsoles.add(tConsole);
                     String[]  staIds = strings[2].trim().split("/");
                     for ( int id =1;id<staIds.length;id++){
-                        if (isInteger(staIds[id].trim())){
+                        if (commonUntil.isInteger(staIds[id].trim())){
                             //Station station = new Station();
                             TStation tStation =new TStation();
                             tStation.setConsoleid(consoleId);
@@ -188,7 +209,7 @@ public class InitConfigImpl implements InitConfig {
 
     @Override
     public   void readEinty(String filename) {
-        System.out.println(filename);
+        logger.info(">>>>>>>>>>>>>读取文件："+ filename);
         File file = new File(filename);
         InputStreamReader read = null;
         BufferedReader reader = null;
@@ -205,7 +226,7 @@ public class InitConfigImpl implements InitConfig {
                 String[] splits = tempString.split("\\s+");
 
                 if (splits.length>3 && splits[1].startsWith("=lirc")){
-                    if(isInteger(splits[1].substring(5).split(",")[0]))
+                    if(commonUntil.isInteger(splits[1].substring(5).split(",")[0]))
                     {
                         int key = Integer.parseInt(splits[1].substring(5).split(",")[0]);
                         staMaps.put(key,splits[2].split(",")[0]);
@@ -232,7 +253,7 @@ public class InitConfigImpl implements InitConfig {
 
     @Override
     public void readTg(String filename) {
-        System.out.println(filename);
+        logger.info(">>>>>>>>>>>>>读取文件："+ filename);
         File file = new File(filename);
         InputStreamReader read = null;
         BufferedReader reader = null;
@@ -334,7 +355,7 @@ public class InitConfigImpl implements InitConfig {
 
     @Override
     public  void readRuntime(String filename) {
-        System.out.println(filename);
+        logger.info(">>>>>>>>>>>>>读取文件："+ filename);
         File file = new File(filename);
         BufferedReader reader = null;
 
@@ -348,7 +369,7 @@ public class InitConfigImpl implements InitConfig {
             TAllExample tAllExample = new TAllExample();
             tAllExample.createCriteria().andAbsnumberIsNotNull();
             int temp = tAllMapper.deleteByExample(tAllExample);
-            System.out.println("InitConfigImpl.readRuntime::::::::删除长度" +  temp);
+            logger.info(">>>>>>>>>>>>>删除区间运行时分表数据条数："+ temp);
             // 一次读入一行，直到读入null为文件结束
             while ((tempString = reader.readLine()) != null) {
 
@@ -414,8 +435,12 @@ public class InitConfigImpl implements InitConfig {
                     tAlls.add(tAll);
                 }
             }
-            System.out.println("InitConfigImpl.readRuntime::::::::导入长度tAlls.size()"+ tAlls.size());
-            tAllMapper.insertListTall(tAlls);
+            logger.info(">>>>>>>>>>>>>导入区间运行时分表数据个数："+ tAlls.size());
+            List<List<TAll>> subtAlls = commonUntil.splitList((List<TAll>) tAlls,20);
+            for (int i =0;i<subtAlls.size();i++){
+                tAllMapper.insertListTall(subtAlls.get(i));
+            }
+
             reader.close();
 
         } catch (IOException e) {

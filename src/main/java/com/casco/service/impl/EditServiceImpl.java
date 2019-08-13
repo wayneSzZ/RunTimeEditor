@@ -12,9 +12,12 @@ import com.casco.pojo.TConsoleExample;
 import com.casco.pojo.TStation;
 import com.casco.pojo.TStationExample;
 import com.casco.service.EditService;
+import com.casco.service.InitConfig;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.util.List;
 
 @Service
@@ -26,6 +29,9 @@ public class EditServiceImpl implements EditService {
     private TStationMapper tStationMapper;
     @Autowired
     private TConsoleMapper tConsoleMapper;
+    @Autowired
+    private InitConfig initConfigImpl;
+    Logger logger = Logger.getLogger(EditServiceImpl.class);
     @Override
     public OutputJson selectTAllbyPage() {
         TAllExample tAllExample = new TAllExample();
@@ -82,11 +88,60 @@ public class EditServiceImpl implements EditService {
     @Override
     public OutputJson getRuntime(int consoleId, int stationId) {
         List<Integer> listStaId = tStationMapper.selectByConAndSta(consoleId,stationId);
-        System.out.println("EditServiceImpl.getRuntime+++++++++++++++++++++++++" + listStaId.size());
-        System.out.println("EditServiceImpl.getRuntime+++++++++++++++++++++++++" + listStaId.get(0));
         List<TAll> list = tAllMapper.selectByStation(listStaId);
 
 
         return ReturnFormat.resultWithCount(0,list,list.size());
+    }
+
+    @Override
+    public OutputJson updateRuntime(TAll tAll) {
+        int line = tAllMapper.updataRuntime(tAll.getStoptime(),tAll.getStarttime(),tAll.getRuntime(),tAll.getAbsnumber(),tAll.getTraintype(),tAll.getRuntimedirection());
+
+        if(line == 1){
+            logger.info(">>>>>>>>>>>>>更新区间运行时分成功："+ tAll.toString());
+            return ReturnFormat.result(0);
+        }else {
+            logger.info(">>>>>>>>>>>>>更新区间运行时分失败："+ tAll.toString());
+            return  null;
+        }
+
+    }
+
+    @Override
+    public OutputJson saveruntime() {
+        String path = initConfigImpl.readPath();
+        TAllExample tAllExample = new TAllExample();
+        tAllExample.setOrderByClause("id ASC");
+        List<TAll> tAlls = tAllMapper.selectByExample(tAllExample);
+        StringBuffer sb = new StringBuffer("");
+        sb.append("[ABS_TIME]");
+        sb.append("\n");
+
+        File file = new File(path + "data/run_time.txt");
+        for (TAll tAll : tAlls){
+            sb.append("ABS_NUMBER= "+tAll.getAbsnumber()+", DIRECTION= "+tAll.getRuntimedirection()+", TYPE= "+tAll.getTraintype()+", STOP_TIME="
+            +tAll.getStoptime()+", START_TIME="+tAll.getStarttime()+", RUN_TIME="+tAll.getRuntime()+"\n");
+        }
+        sb.append("\n");
+        sb.append("[ABS_TIME_END]");
+        try {
+            if(!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fileWriter =new FileWriter(file);
+
+            fileWriter.write(sb.toString());
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+        return ReturnFormat.result(0);
     }
 }

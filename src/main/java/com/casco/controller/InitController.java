@@ -19,7 +19,7 @@ public class InitController  {
     @Log(title = "初始化数据库",action = "清空数据库数据重新加载")
     private void initconfig() throws  OrderPeriodException {
         Long starttime = System.currentTimeMillis();
-        initConfig.readConfig();
+       /* initConfig.readConfig();*/
         long endtime = System.currentTimeMillis();
         System.out.println("InitController.initconfig"+ (endtime-starttime));
     }

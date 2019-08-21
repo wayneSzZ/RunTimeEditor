@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.sound.midi.Soundbank;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -143,6 +144,7 @@ public class InitConfigImpl implements InitConfig  {
             TConsoleExample tConsoleExample = new TConsoleExample();
             tConsoleExample.createCriteria().andConsoleidIsNotNull();
             tConsoleMapper.deleteByExample(tConsoleExample);
+
 
             // 一次读入一行，直到读入null为文件结束
             while ((tempString = reader.readLine()) != null) {
@@ -361,25 +363,24 @@ public class InitConfigImpl implements InitConfig  {
 
 
 
-
         try {
 
             reader = new BufferedReader(new FileReader(file));
             String tempString = null;
             TAllExample tAllExample = new TAllExample();
             tAllExample.createCriteria().andAbsnumberIsNotNull();
-            int temp = tAllMapper.deleteByExample(tAllExample);
+            int temp= tAllMapper.deleteByExample(tAllExample);
             logger.info(">>>>>>>>>>>>>删除区间运行时分表数据条数："+ temp);
             // 一次读入一行，直到读入null为文件结束
             while ((tempString = reader.readLine()) != null) {
-
                 String[] splits = tempString.split(",");
-                TAll tAll = new TAll();
 
+                TAll tAll = new TAll();
                 for (String split : splits){
                     // System.out.print(split);
                     String[] str = split.split("=");
                     //System.out.print(str);
+
                     switch (str[0].trim()){
                         case "ABS_NUMBER":
                             tAll.setAbsnumber(Integer.parseInt(str[1].trim())); break;
@@ -392,7 +393,10 @@ public class InitConfigImpl implements InitConfig  {
                         case "START_TIME":
                             tAll.setStarttime(str[1].trim()); break;
                         case "RUN_TIME":
-                            tAll.setRuntime(str[1].trim()); break;
+                            if (str.length>1){
+                                tAll.setRuntime(str[1].trim());
+                            }
+                             break;
                         default:  break;
                     }
 

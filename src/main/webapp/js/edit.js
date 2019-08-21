@@ -10,12 +10,16 @@ layui.config({
         table = layui.table,
         commonUtils = layui.common;
 
-    window.initData = function(){
+    /*
+    * 初始化界面
+    * */
 
-    }
-
+    /*
+    * 获取台号列表
+    * */
     window.getConsole = function (elem) {
         commonUtils.get("/console", false, true, function (res) {
+            alert("初始化台",6);
             if (res.code == 0) {
                 var data = res.data;
                 var html = "";
@@ -27,7 +31,9 @@ layui.config({
             }
         });
     };
-
+    /*
+    * 获取车站列表
+    * */
     window.getStation = function (consoleId,elem) {
         var params = new Object();
         params.consoleId = consoleId;
@@ -45,7 +51,12 @@ layui.config({
             }
         });
     };
+    window.initData = function(){
 
+        getConsole($('#consoleId'));
+        getStation(1,$('#stationId'));
+    }
+    initData();
 
 /*    $("#consoleId").change(function () {
         var options=$("#consoleId option:selected ");
@@ -55,18 +66,22 @@ layui.config({
         getStation(consoleId,$('.stationId'));
     });*/
 
+    /*
+    * 调度台下拉条改变时，车站列表同时刷新
+    * */
     form.on('select(consoleFilter)', function(data){
         var options=$("#consoleId option:selected ");
 
         var consoleId =  options.val();
 
-        getStation(consoleId,$('.stationId'));
+        getStation(consoleId,$('#stationId'));
     });
-    getStation(1,$('.stationId'))
-    getConsole($('.consoleId'));
 
-    initData();
 
+
+    /*
+    * 保存区间运行时分到磁盘
+    * */
     $("#saveruntime").click(function () {
         var param = new Object();
         param.status = 0;
@@ -77,6 +92,9 @@ layui.config({
         })
     })
 
+    /*
+    * 点击查询按钮，查询区间运行时分，以table方式展现
+    * */
     $("#selectBtn").click(function () {
 
         var options = $("#consoleId option:selected");
@@ -147,6 +165,9 @@ layui.config({
         })
     })
 
+    /*
+    * ？？？
+    * */
     table.on('row(test)', function(obj){
         var data = obj.data;
 
@@ -159,18 +180,28 @@ layui.config({
     });
 
 
+    /*
+    * 输入框聚焦事件
+    * */
     $("body").delegate("input",
         "focus",
         function () {
             $(this).css("color","#FF4500");
         });
 
+    /*
+   * 输入框失去焦点事件
+   * */
     $("body").delegate("input",
         "blur",
         function () {
             $(this).css("color","#3399FF");
         });
 
+    /*
+   * 输入框值改变事件
+   *
+   * */
     $("body").delegate("input",
         "change",
         function () {
@@ -223,9 +254,7 @@ layui.config({
     window.closePage = function(){
     };
 
-    $('.close').click(function () {
 
-    });
 
 });
 

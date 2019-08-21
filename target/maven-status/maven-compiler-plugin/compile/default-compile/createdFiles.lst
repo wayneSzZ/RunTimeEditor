@@ -5,6 +5,7 @@ com\casco\pojo\TAllExample$Criterion.class
 com\casco\aop\AnnotationResolver.class
 com\casco\common\ReturnFormat.class
 com\casco\mapper\business\TRuntimeMapper.class
+com\casco\mode\LoginUserModel.class
 com\casco\mapper\business\TAllMapper.class
 com\casco\pojo\TConsole.class
 com\casco\pojo\TLinedef.class
@@ -40,17 +41,18 @@ com\casco\pojo\TRuntime.class
 com\casco\aop\Log.class
 com\casco\common\CommonUntil.class
 com\casco\mapper\business\TConsoleMapper.class
-com\casco\pojo\Request.class
 com\casco\pojo\TConsoleExample.class
 com\casco\exception\OrderExceptionEnum.class
 com\casco\pojo\TStationExample$Criteria.class
 com\casco\pojo\TStationExample$GeneratedCriteria.class
+com\casco\mode\BaseRequestModel.class
 com\casco\pojo\TConsoleExample$Criterion.class
 com\casco\pojo\TLinedefExample$GeneratedCriteria.class
 com\casco\pojo\TEntry.class
 com\casco\pojo\TConsoleExample$GeneratedCriteria.class
 com\casco\pojo\TStationExample.class
 com\casco\exception\ExceptionLogHandler.class
+com\casco\mode\Request.class
 com\casco\pojo\TRuntimeExample$Criteria.class
 com\casco\service\impl\InsertConfigImpl.class
 com\casco\pojo\TStationExample$Criterion.class

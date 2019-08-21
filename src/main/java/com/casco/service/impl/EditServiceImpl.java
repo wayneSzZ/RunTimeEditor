@@ -5,14 +5,12 @@ import com.casco.common.ReturnFormat;
 import com.casco.mapper.business.TAllMapper;
 import com.casco.mapper.business.TConsoleMapper;
 import com.casco.mapper.business.TStationMapper;
-import com.casco.pojo.TAll;
-import com.casco.pojo.TAllExample;
-import com.casco.pojo.TConsole;
-import com.casco.pojo.TConsoleExample;
-import com.casco.pojo.TStation;
-import com.casco.pojo.TStationExample;
+import com.casco.mode.Request;
+import com.casco.pojo.*;
 import com.casco.service.EditService;
 import com.casco.service.InitConfig;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,11 +85,40 @@ public class EditServiceImpl implements EditService {
 
     @Override
     public OutputJson getRuntime(int consoleId, int stationId) {
+
         List<Integer> listStaId = tStationMapper.selectByConAndSta(consoleId,stationId);
         List<TAll> list = tAllMapper.selectByStation(listStaId);
+        PageInfo<TAll> pageInfo = new PageInfo<TAll>(list);
+        logger.info(">>>>>>>>>>>>>查询数目："+ pageInfo.getTotal());
+        return ReturnFormat.resultWithCount(0,list,pageInfo.getTotal());
+    }
+
+    @Override
+    public OutputJson getRuntime(Request request) {
+        if (request.getPage() != 0 && request.getLimit()!=0){
+
+            if (request.getStationId() == 0){
+                List<Integer> listStaId = tStationMapper.selectByConsoleId(request.getConsoleId());
+                PageHelper.startPage(request.getPage(), request.getLimit());
+                List<TAll> list = tAllMapper.selectByStation(listStaId);
+                PageInfo<TAll> pageInfo = new PageInfo<>(list);
+                logger.info(">>>>>>>>>>>>>传入信息："+ request.toString());
+                logger.info(">>>>>>>>>>>>>查询数目："+ pageInfo.getTotal());
+                return ReturnFormat.resultWithCount(0,list,pageInfo.getTotal());
+            }else {
+                List<Integer> listStaId = tStationMapper.selectByConAndSta(request.getConsoleId(),request.getStationId());
+                PageHelper.startPage(request.getPage(), request.getLimit());
+                List<TAll> list = tAllMapper.selectByStation(listStaId);
+                PageInfo<TAll> pageInfo = new PageInfo<>(list);
+                logger.info(">>>>>>>>>>>>>传入信息："+ request.toString());
+                logger.info(">>>>>>>>>>>>>查询数目："+ pageInfo.getTotal());
+                return ReturnFormat.resultWithCount(0,list,pageInfo.getTotal());
+            }
 
 
-        return ReturnFormat.resultWithCount(0,list,list.size());
+        }
+
+        return null;
     }
 
     @Override
@@ -106,6 +133,61 @@ public class EditServiceImpl implements EditService {
             return  null;
         }
 
+    }
+
+    @Override
+    public OutputJson insertRuntime(TAll tAll) {
+
+        int line = tAllMapper.insert(tAll);
+        if(line == 1){
+            logger.info(">>>>>>>>>>>>>增加区间运行时分成功："+ tAll.toString());
+            return ReturnFormat.result(0);
+        }else {
+            logger.info(">>>>>>>>>>>>>增加区间运行时分失败："+ tAll.toString());
+            return  null;
+        }
+
+    }
+
+    @Override
+    public OutputJson delRuntime(TAll tAll) {
+        TAllExample tAllExample = new TAllExample();
+        TAllExample.Criteria criteria = tAllExample.createCriteria();
+        criteria.andAbsnumberEqualTo(tAll.getAbsnumber());
+        criteria.andTraintypeEqualTo(tAll.getTraintype());
+        criteria.andRuntimedirectionEqualTo(tAll.getRuntimedirection());
+        int len = tAllMapper.deleteByExample(tAllExample);
+        if (len == 1){
+            logger.info(">>>>>>>>>>>>>删除区间运行时分成功："+ tAll.toString());
+            return ReturnFormat.result(0);
+        }else {
+            logger.info(">>>>>>>>>>>>>删除区间运行时分失败："+ tAll.toString());
+            return ReturnFormat.result(1);
+        }
+
+    }
+
+    @Override
+    public OutputJson delsomeRuntime(List<TAll> tAlls) {
+        int sum=0;
+        for (TAll tAll : tAlls){
+            TAllExample tAllExample = new TAllExample();
+            TAllExample.Criteria criteria = tAllExample.createCriteria();
+            criteria.andAbsnumberEqualTo(tAll.getAbsnumber());
+            criteria.andTraintypeEqualTo(tAll.getTraintype());
+            criteria.andRuntimedirectionEqualTo(tAll.getRuntimedirection());
+            int len = tAllMapper.deleteByExample(tAllExample);
+            tAllExample = null;
+            sum=sum+len;
+            logger.info(">>>>>>>>>>>>>批量删除区间运行时分第" + sum + "个" + "\t删除内容：" + tAll.toString());
+        }
+        if (sum == tAlls.size()){
+            logger.info(">>>>>>>>>>>>>批量删除区间运行时分成功：");
+            return ReturnFormat.result(0);
+        }else {
+            logger.info(">>>>>>>>>>>>>批量删除区间运行时分失败：");
+            return ReturnFormat.result(1);
+        }
     }
 
     @Override

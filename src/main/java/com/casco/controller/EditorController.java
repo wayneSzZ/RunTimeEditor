@@ -8,6 +8,8 @@ import com.casco.pojo.TAll;
 import com.casco.service.EditService;
 import com.casco.service.InitConfig;
 import com.casco.service.InsertConfig;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,16 +20,18 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@Api("区间运行时分编辑响应")
 public class EditorController   {
 
-    @Autowired
+   /* @Autowired
     private InsertConfig insertConfig;
     @Autowired
-    private InitConfig initConfig;
+    private InitConfig initConfig;*/
     @Autowired
     private EditService editService;
 
     @Log(title = "编辑界面",action = "响应编辑界面")
+    @ApiOperation(value = "初始化界面" , notes = "初始化编辑界面" ,httpMethod = "GET")
     @RequestMapping("/edit")
     public String edit(){
         return "edit";
@@ -35,6 +39,7 @@ public class EditorController   {
 
 
     @Log(title = "编辑界面",action = "响应ly编辑界面")
+    @ApiOperation(value = "初始化界面" , notes = "初始化ly编辑界面" ,httpMethod = "GET")
     @RequestMapping("/lyedit")
     public String lyedit(){
         return "lyedit";
@@ -48,6 +53,7 @@ public class EditorController   {
         return editService.selectTAllbyPage();
     }
     @Log(title = "调度台",action = "初始化调度台列表")
+    @ApiOperation(value = "响应台列表" , notes = "响应台列表" ,httpMethod = "POST")
     @RequestMapping("/console")
     @ResponseBody
     public  OutputJson console(){
